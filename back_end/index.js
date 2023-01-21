@@ -1,0 +1,52 @@
+const express = require('express')
+const bodyParser = require('body-parser')
+const mongoose = require('mongoose')
+
+const dbConfig = require('./config/mongodb.config.js')
+const User = require('./model/users.js')
+
+const cors = require('cors')
+const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({extended: true}))
+
+mongoose.Promise = global.Promise;
+mongoose.connect(dbConfig.url)
+    .then(()=>{
+        console.log("can connect to MongoDB")
+     }).catch(err=>{
+        console.log('cannot connect to MongoDB')
+        process.exit();
+     })
+
+     app.use(cors())
+     require('./routes/user-route')(app);
+
+     const server = app.listen(3000,()=>{
+        let port = server.address().port
+        console.log('run at http://localhost:%s',port)
+     })
+
+     function initUser(){
+        let data = [
+            {
+                UserID: 6410301021,
+                FullName: "Jittapat",
+                Email: "idea26746@gmail.com",
+                Password: "1234"
+            },
+            {
+                UserID: 6410301022,
+                FullName: "Pon",
+                Email: "PonloveBam@gmail.com",
+                Password: "love"
+            }
+        ]
+        for(let i = 0;i<data.length;i++){
+            const c= new User(data[i])
+            c.save()
+        }
+        console.log("สร้างได้อะครับน้องๆ")
+     }
+
