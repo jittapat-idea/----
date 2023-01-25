@@ -28,25 +28,4 @@ mongoose.connect(dbConfig.url)
         console.log('run at http://localhost:%s',port)
      })
 
-     function initUser(){
-        let data = [
-            {
-                UserID: 6410301021,
-                FullName: "Jittapat",
-                Email: "idea26746@gmail.com",
-                Password: "1234"
-            },
-            {
-                UserID: 6410301022,
-                FullName: "Pon",
-                Email: "PonloveBam@gmail.com",
-                Password: "love"
-            }
-        ]
-        for(let i = 0;i<data.length;i++){
-            const c= new User(data[i])
-            c.save()
-        }
-        console.log("สร้างได้อะครับน้องๆ")
-     }
-
+     
