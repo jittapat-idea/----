@@ -1,6 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
+const morgan = require('morgan')
 
 const dbConfig = require('./config/mongodb.config.js')
 const User = require('./model/users.js')
