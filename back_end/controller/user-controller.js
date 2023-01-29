@@ -73,3 +73,42 @@
 //         })
 //     })
 // }
+
+const users = require('../model/users.js')
+
+exports.index = (req,res)=>{
+    res.render("login")
+ }
+
+ exports.signup = (req,res)=>{
+    res.render("signup")
+ }
+
+ exports.signup_db = async(req,res)=>{
+
+    const data = {
+       name:req.body.name,
+       password:req.body.password
+    }
+    
+    await users.insertMany([data])
+    
+    res.render("home")
+ }
+
+ exports.login = async(req,res)=>{
+
+   try{
+      const check= await users.findOne({name:req.body.name})
+      if(check.password===req.body.password){
+         res.render("home")
+      }
+      else{
+         res.send("wrong password")
+      }
+   }
+   catch{
+      res.send("wrong detail")
+   }
+   
+ }

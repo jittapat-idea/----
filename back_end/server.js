@@ -38,10 +38,15 @@ const app = express();
 const path=require("path");
 const { connected } = require('process');
 const hbs=require("hbs")
+const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const User = require('./model/users.js')
+const cors = require('cors')
+
+
 
 const dbConfig = require('./config/mongodb.config.js')
+mongoose.Promise = global.Promise
 mongoose.connect(dbConfig.url)
     .then(()=>{
         console.log("can connect to MongoDB")
@@ -55,45 +60,11 @@ const templatePath = path.join(__dirname,'/template')
 app.use(express.json())
 app.set("view engine","hbs")
 app.set("views",templatePath)
-app.use(express.urlencoded({extended: true}))
+app.use(express.urlencoded({extended: false}))
 
+app.use(cors())
+require('./routes/user-route')(app);
 
-app.get("/",(req,res)=>{
-   res.render("login")
-})
-
-app.get("/signup",(req,res)=>{
-   res.render("signup")
-})
-
-app.post("/signup",async(req,res)=>{
-
-const data = {
-   name:req.body.name,
-   password:req.body.password
-}
-
-await User.insertMany([data])
-
-res.render("home")
-})
-
-app.post("/login",async(req,res)=>{
-
-   try{
-      const check= await User.findOne({name:req.body.name})
-      if(check.password===req.body.password){
-         res.render("home")
-      }
-      else{
-         res.send("wrong password")
-      }
-   }
-   catch{
-      res.send("wrong detail")
-   }
-   
-   })
 
 app.listen(3000,()=>{
    console.log("port connected")

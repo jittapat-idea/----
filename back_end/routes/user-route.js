@@ -11,3 +11,12 @@
 //     app.delete('/api/user/:userId',user.delete);
 // }
 
+module.exports =(app)=>{
+    const user = require("../controller/user-controller.js")
+
+    app.get('/',user.index);
+    app.get('/signup',user.signup);
+    
+    app.post('/signup',user.signup_db);
+    app.post('/login',user.login);
+}
