@@ -16,7 +16,8 @@ module.exports =(app)=>{
 
     app.get('/',user.index);
     app.get('/signup',user.signup);
-    
+    app.get('/home', user.home);
+
     app.post('/signup',user.signup_db);
-    app.post('/login',user.login);
+    app.post('/home',user.login);
 }

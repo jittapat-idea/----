@@ -80,6 +80,10 @@ exports.index = (req,res)=>{
     res.render("login")
  }
 
+ exports.home = (req,res) =>{
+   res.render("home")
+ }
+
  exports.signup = (req,res)=>{
     res.render("signup")
  }
@@ -93,7 +97,7 @@ exports.index = (req,res)=>{
     
     await users.insertMany([data])
     
-    res.render("home")
+    res.render("login")
  }
 
  exports.login = async(req,res)=>{
