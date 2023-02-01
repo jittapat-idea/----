@@ -74,14 +74,26 @@
 //     })
 // }
 
+//const sessions = require('express-session')
 const users = require('../model/users.js')
 
+var session
 exports.index = (req,res)=>{
-    res.render("login")
+   session = req.session;
+   if(session.userid){
+      res.render("home")
+   }else
+   res.render("login")
+   
+    
+ }
+ exports.logout = (req,res)=>{
+   req.session.destroy();
+   res.redirect('/');
  }
 
- exports.home = (req,res) =>{
-   res.render("home")
+ exports.loginpage = (req,res) =>{
+   res.render("login")
  }
 
  exports.signup = (req,res)=>{
@@ -91,6 +103,7 @@ exports.index = (req,res)=>{
  exports.signup_db = async(req,res)=>{
 
     const data = {
+       email:req.body.email,
        name:req.body.name,
        password:req.body.password
     }
@@ -105,6 +118,9 @@ exports.index = (req,res)=>{
    try{
       const check= await users.findOne({name:req.body.name})
       if(check.password===req.body.password){
+         session=req.session;
+         session.userid=req.body.name;
+         console.log(req.session)
          res.render("home")
       }
       else{

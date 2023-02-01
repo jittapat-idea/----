@@ -5,15 +5,43 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>sign up</title>
+    <style>
+        h2{
+            display: flex;
+            justify-content: center;
+        }
+        body{
+            display: flex;
+            justify-content: center;
+        }
+        form{
+            display: flex;
+            flex-direction: column;
+        }
+        .input-field{
+            position: relative;
+            margin-top: 2rem;
+        }
+        form input[type="submit"]{
+            margin-top: 2rem;
+        }
+    </style>
 </head>
 <body>
-    <h2>sign up</h2>
 
     <form action="/signup" method="post">
-
-    <input type="name" name ="name" placeholder="Your name">
-    <input type="password" name = "password" placeholder="Your password">
-    <input type="submit">
+    <h2>sign up</h2>
+    <div class="input-field">
+        <input type="email" name ="email" placeholder="Your cdti email">
+    </div>
+    <div class="input-field">
+        <input type="name" name ="name" placeholder="Your name">
+    </div>
+    <div class="input-field">
+        <input type="password" name = "password" placeholder="Your password">
+    </div>
+    
+    <input type="submit" value="save">
     
     </form>
     

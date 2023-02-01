@@ -15,8 +15,10 @@ module.exports =(app)=>{
     const user = require("../controller/user-controller.js")
 
     app.get('/',user.index);
+    app.get('/login',user.loginpage);
     app.get('/signup',user.signup);
-    app.get('/home', user.home);
+    app.get('/home', user.index);
+    app.get('/logout',user.logout);
 
     app.post('/signup',user.signup_db);
     app.post('/home',user.login);
