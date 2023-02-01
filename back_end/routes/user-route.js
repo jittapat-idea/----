@@ -13,12 +13,15 @@
 
 module.exports =(app)=>{
     const user = require("../controller/user-controller.js")
+    const error = require("../controller/404-controller.js")
 
     app.get('/',user.index);
     app.get('/login',user.loginpage);
     app.get('/signup',user.signup);
     app.get('/home', user.index);
     app.get('/logout',user.logout);
+
+    app.get('*',error.error);
 
     app.post('/signup',user.signup_db);
     app.post('/home',user.login);
