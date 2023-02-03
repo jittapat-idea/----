@@ -78,9 +78,10 @@
 const users = require('../model/users.js')
 
 const navLinks = [
-   { href: '/', label: 'Home' },
-   { href: '/items', label: 'Items' },
+   { href: '/home', label: 'Home' },
+   { href: '/home/items', label: 'Items' },
    { href: '/about', label: 'About' },
+   { href:'/logout',label:'logout'}
  ];
 
 var session
@@ -107,28 +108,37 @@ exports.index = (req,res)=>{
  }
 
  exports.signup_db = async(req,res)=>{
-   const data = {name , email , password} = req.body;
-   //  const data = {
-   //     email:req.body.email,
-   //     name:req.body.name,
-   //     password:req.body.password
-   //  }
-    const user = new users({
-      name,
-      email,
-      password
-    })
-    //await users.insertMany([data])
-    await user.save()
-    
-    res.render("login")
+   const {name , email , password} = req.body;
+   try{
+       const check= await users.findOne({email:email})
+       if(!check && name != ''&& password != '' && email != ''){
+         const user = new users({
+            name,
+            email,
+            password
+          })
+          await user.save()
+          res.render("login")
+       }
+       else if(name == ''|| password == '' || email == ''){
+         res.render("error", {message: 'incomplete information'})
+       }
+       else{
+         res.render("error", {message: 'your email is already use'})
+       }
+   }
+   catch{
+      res.render("error", {message: 'error'})
+   }
  }
 
  exports.login = async(req,res)=>{
 
    try{
-      
       const check= await users.findOne({name:req.body.name})
+      if(!check){
+         res.render("error", {message: 'your name is worng'})
+      }
       const isvalid = await check.ischeckpassword(req.body.password)
       console.log(isvalid);
       if(isvalid ){
@@ -138,11 +148,16 @@ exports.index = (req,res)=>{
          res.render("home", { navLinks })
       }
       else{
-         res.send("password wrong")
+         res.render("error", {message: 'your password is worng'})
       }
    }
    catch{
-      res.send("wrong detail")
+      if(!req.body.name || !req.body.password){
+         res.render("error", {message: 'name or password invalid'})
+      }
+      else{
+         res.render("error", {message: 'session error'})
+      }
    }
    
  }

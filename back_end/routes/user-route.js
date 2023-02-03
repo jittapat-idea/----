@@ -16,7 +16,7 @@ module.exports =(app)=>{
     const error = require("../controller/404-controller.js")
 
     app.get('/',user.index);
-    app.get('/login',user.loginpage);
+    app.get('/login',user.index);
     app.get('/signup',user.signup);
     app.get('/home', user.index);
     app.get('/logout',user.logout);
