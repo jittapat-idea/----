@@ -57,6 +57,8 @@ mongoose.connect(dbConfig.url)
      })
 
 const templatePath = path.join(__dirname,'/template')
+const partialsPath = path.join(__dirname, "/template/partials");
+
 //Add the Express-session options
 const oneDay = 1000 * 60 * 60 * 24;
 app.use(sessions({
@@ -66,7 +68,8 @@ app.use(sessions({
    resave: false
 }))
 
-
+// Register the partials directory
+hbs.registerPartials(partialsPath);
 
 app.use(express.json())
 app.set("view engine","hbs")
@@ -78,6 +81,8 @@ app.use(cookieParser())
 
 app.use(cors())
 require('./routes/user-route')(app);
+
+
 
 
 app.listen(3000,()=>{

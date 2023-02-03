@@ -77,11 +77,17 @@
 //const sessions = require('express-session')
 const users = require('../model/users.js')
 
+const navLinks = [
+   { href: '/', label: 'Home' },
+   { href: '/items', label: 'Items' },
+   { href: '/about', label: 'About' },
+ ];
+
 var session
 exports.index = (req,res)=>{
    session = req.session;
    if(session.userid){
-      res.render("home")
+      res.render("home", { navLinks })
    }else
    res.render("login")
    
@@ -121,7 +127,7 @@ exports.index = (req,res)=>{
          session=req.session;
          session.userid=req.body.name;
          console.log(req.session)
-         res.render("home")
+         res.render("home", { navLinks })
       }
       else{
          res.send("wrong password")
