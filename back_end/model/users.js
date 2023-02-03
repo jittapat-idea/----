@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const bcrypt = require('bcrypt')
 
 const userSchema = new mongoose.Schema({
     //UserID: Number,
@@ -15,6 +16,29 @@ const userSchema = new mongoose.Schema({
         required:true
     }
 })
+
+userSchema.pre('save', async function (next){
+    try{
+      const salt = await bcrypt.genSalt(10)
+      const hashpassword = await bcrypt.hash(this.password,salt);
+      this.password = hashpassword;
+      console.log(this.name,this.email,this.password)
+      next()
+    }
+    catch(error){
+        next(error)
+    }
+})
+
+userSchema.methods.ischeckpassword = async function (password) {
+    try{
+        return await bcrypt.compare(password,this.password);
+    }
+    catch(error){
+        next(error);
+    }
+}
+
 
 module.exports =new mongoose.model("user",userSchema);
 

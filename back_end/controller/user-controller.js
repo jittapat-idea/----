@@ -107,14 +107,19 @@ exports.index = (req,res)=>{
  }
 
  exports.signup_db = async(req,res)=>{
-
-    const data = {
-       email:req.body.email,
-       name:req.body.name,
-       password:req.body.password
-    }
-    
-    await users.insertMany([data])
+   const data = {name , email , password} = req.body;
+   //  const data = {
+   //     email:req.body.email,
+   //     name:req.body.name,
+   //     password:req.body.password
+   //  }
+    const user = new users({
+      name,
+      email,
+      password
+    })
+    //await users.insertMany([data])
+    await user.save()
     
     res.render("login")
  }
@@ -122,15 +127,18 @@ exports.index = (req,res)=>{
  exports.login = async(req,res)=>{
 
    try{
+      
       const check= await users.findOne({name:req.body.name})
-      if(check.password===req.body.password){
+      const isvalid = await check.ischeckpassword(req.body.password)
+      console.log(isvalid);
+      if(isvalid ){
          session=req.session;
          session.userid=req.body.name;
          console.log(req.session)
          res.render("home", { navLinks })
       }
       else{
-         res.send("wrong password")
+         res.send("password wrong")
       }
    }
    catch{
