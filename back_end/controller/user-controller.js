@@ -85,10 +85,16 @@ const navLinks = [
  ];
 
 var session
-exports.index = (req,res)=>{
+exports.index = async(req,res)=>{
+   
    session = req.session;
+   
    if(session.userid){
-      res.render("home", { navLinks })
+      const check= await users.findOne({name:req.body.name})
+      res.render("home", {
+          navLinks,
+          userName:check.name
+         })
    }else
    res.render("login")
    
@@ -145,7 +151,10 @@ exports.index = (req,res)=>{
          session=req.session;
          session.userid=req.body.name;
          console.log(req.session)
-         res.render("home", { navLinks })
+         res.render("home", {
+            navLinks,
+            userName:check.name
+           })
       }
       else{
          res.render("error", {message: 'your password is worng'})
