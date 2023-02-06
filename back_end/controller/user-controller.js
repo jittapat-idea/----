@@ -83,7 +83,7 @@ const navLinks = [
    { href: '/about', label: 'About' },
    { href:'/logout',label:'logout'}
  ];
-
+ var currentYear=(new Date().getFullYear())
 var session
 exports.index = async(req,res)=>{
    
@@ -93,7 +93,8 @@ exports.index = async(req,res)=>{
       const check= await users.findOne({name:session.userid})
       res.render("home", {
           navLinks,
-          userName:check.name
+          userName:session.userid,
+          currentYear
          })
    }else
    res.render("login")
@@ -153,7 +154,7 @@ exports.index = async(req,res)=>{
          console.log(req.session)
          res.render("home", {
             navLinks,
-            userName:check.name
+            userName:session.userid
            })
       }
       else{
