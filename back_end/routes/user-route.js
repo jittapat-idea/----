@@ -15,6 +15,7 @@ module.exports =(app)=>{
     const user = require("../controller/user-controller.js")
     const error = require("../controller/404-controller.js")
     const item = require("../controller/borrow-controller.js")
+    const aeditem = require("../controller/add-edit-delete-item-controller.js")
 
     app.get('/',user.index);
     app.get('/login',user.index);
@@ -22,11 +23,11 @@ module.exports =(app)=>{
     app.get('/home', user.index);
     app.get('/logout',user.logout);
     app.get('/items',item.getAllitems);
-    
-    app.get('*',error.error);
-
-    
-
+    app.get('/add-item',aeditem.Additems);
+   
+    app.post('/add-item',aeditem.Additems_db)
     app.post('/signup',user.signup_db);
     app.post('/home',user.login);
+
+    app.get('*',error.error);
 }

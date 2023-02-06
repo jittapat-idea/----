@@ -80,7 +80,7 @@ const users = require('../model/users.js')
 const navLinks = [
    { href: '/home', label: 'Home' },
    { href: '/items', label: 'Items' },
-   { href: '/about', label: 'About' },
+   { href: '/add-item', label: 'Add Item' },
    { href:'/logout',label:'logout'}
  ];
  var currentYear=(new Date().getFullYear())

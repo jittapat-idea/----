@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Item</title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+  {{> navbar links = navLinks}}
+  <div class="container mt-5">
+    <h1 class="text-center">Add Item</h1>
+    <form action="/add-item" method="post">
+      <div class="form-group">
+        <label for="itemname">Name</label>
+        <input type="itemname" class="form-control" id="itemname" name="itemname" >
+      </div>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <input type="description" class="form-control" id="description" name="description" >
+      </div>
+      <div class="form-group">
+        <label for="quantity">Quantity</label>
+        <input type="quantity" class="form-control" id="quantity" name="quantity" >
+      </div>
+      <button type="submit" class="btn btn-primary">Add Item</button>
+    </form>
+  </div>
+  {{> footer currentYear = currentYear}}
+</body>
+</html>
