@@ -79,7 +79,7 @@ const users = require('../model/users.js')
 
 const navLinks = [
    { href: '/home', label: 'Home' },
-   { href: '/home/items', label: 'Items' },
+   { href: '/items', label: 'Items' },
    { href: '/about', label: 'About' },
    { href:'/logout',label:'logout'}
  ];
@@ -90,7 +90,7 @@ exports.index = async(req,res)=>{
    session = req.session;
    
    if(session.userid){
-      const check= await users.findOne({name:req.body.name})
+      const check= await users.findOne({name:session.userid})
       res.render("home", {
           navLinks,
           userName:check.name
