@@ -96,6 +96,24 @@ exports.edititem_db = async (req, res) => {
     res.status(500).send(error.message);
   }
 };
+exports.deletez = (req, res) => {
+  console.log(req.params.id)
+  items.findByIdAndDelete(req.params.id)
+    .then(data => {
+      if (!data) {
+        return res.status(404).json({
+          msg: "No record found with ID: " + req.params.id
+        });
+      }
+      res.redirect("/items");
+    })
+    .catch(err => {
+      return res.status(500).json({
+        msg: "An error occurred: " + err.message
+      });
+    });
+};
+
 // exports.edititem_db = (req, res) =>{
 //   items.findByIdAndUpdate(req.params.id,{$set: req.body},{new: true})
 //     .then(data => {

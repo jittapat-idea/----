@@ -26,11 +26,11 @@ module.exports =(app)=>{
     app.get('/add-item',aeditem.Additems);
     app.get('/edit-item/:id',aeditem.edititem);
     
-    
+    app.post('/delete-item/:id',aeditem.deletez);
     app.post('/edit-item/:id',aeditem.edititem_db);
     app.post('/add-item',aeditem.Additems_db);
     app.post('/signup',user.signup_db);
     app.post('/home',user.login);
-
+    
     app.get('*',error.error);
 }
