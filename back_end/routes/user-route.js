@@ -24,8 +24,11 @@ module.exports =(app)=>{
     app.get('/logout',user.logout);
     app.get('/items',item.getAllitems);
     app.get('/add-item',aeditem.Additems);
-   
-    app.post('/add-item',aeditem.Additems_db)
+    app.get('/edit-item/:id',aeditem.edititem);
+    
+    
+    app.post('/edit-item/:id',aeditem.edititem_db);
+    app.post('/add-item',aeditem.Additems_db);
     app.post('/signup',user.signup_db);
     app.post('/home',user.login);
 

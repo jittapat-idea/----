@@ -5,28 +5,29 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-  <title>items</title>
+  <title>Edit Item</title>
 </head>
 <body class="d-flex flex-column min-vh-100">
   {{> navbar links = navLinks}}
-  <div class="container">
-    <h1>Items</h1>
-    <div class="row">
-      {{#each showitem}}
-        <div class="col-sm-4">
-          <div class="card" style="width: 18rem;">
-            <div class="card-body">
-              <h5 class="card-title">{{this.itemname}}</h5>
-              <p class="card-text">{{this.description}}</p>
-              <a href="#" class="btn btn-primary">ยืม</a>
-              <a href="edit-item/{{this._id}}" class =" btn btn-warning"> edit </a>
-            </div>
-          </div>
-        </div>
-      {{/each}}
-    </div>
+  <div class="container my-5">
+    <h1>Edit Item</h1>
+    <form action="/edit-item/{{item._id}}" method="post">
+      <input type="hidden" name="_id" value="{{item._id}}">
+      <div class="form-group">
+        <label for="itemname">Item Name</label>
+        <input type="itemname" class="form-control" id="itemname" name="itemname" value="{{item.itemname}}">
+      </div>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea class="form-control" id="description" name="description" rows="3">{{item.description}}</textarea>
+      </div>
+      <div class="form-group">
+        <label for="quantity">Quantity</label>
+        <input type="quantity" class="form-control" id="quantity" name="quantity" value="{{item.quantity}}">
+      </div>
+      <button type="submit" class="btn btn-primary">Save</button>
+    </form>
   </div>
-
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
