@@ -23,12 +23,12 @@ module.exports =(app)=>{
     app.get('/home', user.index);
     app.get('/logout',user.logout);
     app.get('/items',item.getAllitems);
-    app.get('/add-item',aeditem.Additems);
-    app.get('/edit-item/:id',aeditem.edititem);
+    app.get('/add-item',user.isAdmin,aeditem.Additems);
+    app.get('/edit-item/:id',user.isAdmin,aeditem.edititem);
     
-    app.post('/delete-item/:id',aeditem.deletez);
-    app.post('/edit-item/:id',aeditem.edititem_db);
-    app.post('/add-item',aeditem.Additems_db);
+    app.post('/delete-item/:id',user.isAdmin,aeditem.deletez);
+    app.post('/edit-item/:id',user.isAdmin,aeditem.edititem_db);
+    app.post('/add-item',user.isAdmin,aeditem.Additems_db);
     app.post('/signup',user.signup_db);
     app.post('/home',user.login);
     

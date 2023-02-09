@@ -116,13 +116,15 @@ exports.index = async(req,res)=>{
 
  exports.signup_db = async(req,res)=>{
    const {name , email , password} = req.body;
+   const role = "user"
    try{
        const check= await users.findOne({email:email})
        if(!check && name != ''&& password != '' && email != ''){
          const user = new users({
             name,
             email,
-            password
+            password,
+            role
           })
           await user.save()
           res.render("login")
@@ -140,7 +142,7 @@ exports.index = async(req,res)=>{
  }
 
  exports.login = async(req,res)=>{
-
+   
    try{
       const check= await users.findOne({name:req.body.name})
       if(!check){
@@ -151,6 +153,7 @@ exports.index = async(req,res)=>{
       if(isvalid ){
          session=req.session;
          session.userid=req.body.name;
+         console.log(check.role)
          console.log(req.session)
          res.render("home", {
             navLinks,
@@ -168,6 +171,23 @@ exports.index = async(req,res)=>{
       else{
          res.render("error", {message: 'session error'})
       }
+   }
+   
+ }
+
+ exports.isAdmin = async(req,res,next) => {
+   const name = req.session.userid
+   const check= await users.findOne({name:name})
+   console.log(check)
+   if(check){
+      if(check && check.role === "admin"){
+         next()
+      }
+      else{
+         res.render("error", {message: 'your are not Admin'})
+      }
+   }else{
+      res.render("error", {message: 'No user found'})
    }
    
  }
