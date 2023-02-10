@@ -12,6 +12,10 @@ const itemSchema = mongoose.Schema({
     quantity:{
         type:Number,
         required:true
+    },
+    imageURL:{
+        type:String,
+        require:true
     }
 })
 

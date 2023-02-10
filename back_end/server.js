@@ -36,6 +36,7 @@
 const express = require('express')
 const app = express();
 const path=require("path");
+const multer = require("multer");
 // const { connected } = require('process');
 const hbs=require("hbs")
 const bodyParser = require('body-parser')

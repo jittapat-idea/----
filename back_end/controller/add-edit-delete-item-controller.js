@@ -1,4 +1,31 @@
+const multer = require('multer');
+const path = require('path');
+const sharp = require('sharp');
 const items = require('../model/items.js')
+
+const storage = multer.diskStorage({
+  destination:"./public/uploads/",
+  filename: function(req,file,cb){
+    cb(
+      null,
+      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+    )
+  }
+})
+
+const upload = multer({
+  storage: storage,
+  limits:{fileSize:5000000},
+  fileFilter: function(req, file, cb){
+    const filetypes = /jpeg|jpg|png/;
+    const mimetype = filetypes.test(file.mimetype);
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+    if(mimetype && extname){
+      return cb(null,true)
+    }
+    cb("Error: File upload only supports the following filetypes - " + filetypes);
+  }
+}).single("image")
 
 const navLinks = [
     { href: '/home', label: 'Home' },
@@ -20,32 +47,44 @@ exports.Additems = (req, res)=>{
     res.render("login")
 }
 
-exports.Additems_db = async(req,res) =>{
-    const {itemname , description , quantity} = req.body;
-   try{
-       console.log("you try")
-       const check= await items.findOne({itemname:itemname})
-       if(!check && itemname != ''&& description != '' && quantity != ''){
-         const data = {
+exports.Additems_db = async (req, res) => {
+  upload(req, res, async (err) => {
+    if (err) {
+      return res.render("error", { message: err });
+    }
+    if(!req.file){
+      return res.render("error",{ message: "not file upload" })
+    }
+    const { itemname, description, quantity } = req.body;
+    try {
+      console.log("you try");
+      const check = await items.findOne({ itemname: itemname });
+      if (!check && itemname != "" && description != "" && quantity != "") {
+        sharp(req.file.path)
+        .resize(200)
+        .toFile("./public/uploads/resized-" + req.file.filename, async(err) =>{
+          if(err){
+            return res.render("error", { message: err });
+          }
+          const data = {
             itemname,
             description,
-            quantity
-          }
-          await items.insertMany([data])
-          res.redirect('/home');
-       }
-       else if(itemname == ''|| description == '' || quantity == ''){
-         res.render("error", {message: 'incomplete information'})
-       }
-       else{
-         res.render("error", {message: 'your already have this item'})
-       }
-   }
-   catch{
-      res.render("error", {message: 'error'})
-   }
-
-}
+            quantity,
+            imageURL:"resized-" + req.file.filename,
+          };
+          await items.insertMany([data]);
+          res.redirect("/home");
+        })
+      } else if (itemname == "" && description == "" && quantity == "") {
+        res.render("error", { message: "incomplete information" });
+      } else {
+        res.render("error", { message: "you already have this item" });
+      }
+    } catch(error){
+      res.render("error", { message: error });
+    }
+  });
+};
 
 
 exports.edititem = (req, res)=>{
