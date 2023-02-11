@@ -126,6 +126,15 @@ exports.edititem_db = async (req, res) => {
       item.itemname = itemname;
       item.description = description;
       item.quantity = quantity;
+      // if(req.file && req.file.image){
+      //   fs.unlinkSync(`./public/uploads/${item.imageURL}`);
+
+      //   const image = req.file.image;
+      //   const imageURL = `${item._id}${path.extname(image.name)}`;
+
+      //   image.mv(`./public/uploads/${imageURL}`);
+      //   item.imageURL = imageURL
+      // }
       await item.save();
       res.redirect('/items');
     }
