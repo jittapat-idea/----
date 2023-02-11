@@ -2,6 +2,7 @@ const multer = require('multer');
 const path = require('path');
 const sharp = require('sharp');
 const items = require('../model/items.js')
+const fs = require('fs')
 
 const storage = multer.diskStorage({
   destination:"./public/uploads/",
@@ -137,14 +138,30 @@ exports.edititem_db = async (req, res) => {
 };
 exports.deletez = (req, res) => {
   console.log(req.params.id)
-  items.findByIdAndDelete(req.params.id)
+  items.findById(req.params.id)
     .then(data => {
       if (!data) {
         return res.status(404).json({
           msg: "No record found with ID: " + req.params.id
         });
       }
-      res.redirect("/items");
+      console.log(`data.imageURL:${data.imageURL}`)
+      
+      fs.unlink(`./public/uploads/${data.imageURL}`, (err) => {
+        if (err) {
+          console.error(err);
+        }
+        const originalFilename = data.imageURL.replace('resized-','');
+        fs.unlink(`./public/uploads/${originalFilename}`, (err) => {
+          if (err) {
+            console.error(err);
+          }
+          items.findByIdAndDelete(req.params.id)
+            .then(() => {
+              res.redirect("/items");
+            });
+        });
+      });
     })
     .catch(err => {
       return res.status(500).json({
