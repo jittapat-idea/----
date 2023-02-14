@@ -23,3 +23,21 @@ exports.getAllitems = async(req, res) => {
     }else
     res.render("login")
 }
+
+exports.borrowitem = (req, res) =>{
+    session = req.session;
+    const id = req.params.id;
+    if(session.userid){
+        items.findById( id,(err,item) =>{
+            if(err) return res.status(500).send('error finding item');
+            if(!item) return res.status(500).send('item not found');
+            res.render('borrow_item',{
+                item,
+                navLinks,
+                currentYear,
+                userName:session.userid
+            })
+        })
+    }else
+    res.render("login")
+}
