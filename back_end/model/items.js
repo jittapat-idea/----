@@ -16,6 +16,14 @@ const itemSchema = mongoose.Schema({
     imageURL:{
         type:String,
         require:true
+    },
+    borrowedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users',
+    },
+    borrowedQuantity: {
+        type: Number,
+        default: 0
     }
 })
 

@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 
 const userSchema = new mongoose.Schema({
-    //UserID: Number,
+    
     name:{
         type:String,
         required:true
@@ -19,7 +19,16 @@ const userSchema = new mongoose.Schema({
         type:String,
         default:"user",
         enum:["user","admin"]
-    }
+    },
+    borrowedItems: [{
+        itemId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "items"
+        },
+        quantity: {
+          type: Number
+        }
+      }]
 })
 
 userSchema.pre('save', async function (next){
