@@ -75,7 +75,8 @@
 // }
 
 //const sessions = require('express-session')
-const users = require('../model/users.js')
+const users = require('../model/users.js');
+const { borrowitem } = require('./borrow-controller.js');
 
 const navLinks = [
    { href: '/home', label: 'Home' },
@@ -88,12 +89,13 @@ var session
 exports.index = async(req,res)=>{
    
    session = req.session;
-   
+   const username = session.userid
    if(session.userid){
-      const check= await users.findOne({name:session.userid})
+      const user = await users.findOne({name:username}).populate('borrowedItems').exec()
       res.render("home", {
           navLinks,
-          userName:session.userid,
+          userName:username,
+          borrowedItems:user.borrowedItems,
           currentYear
          })
    }else
@@ -150,14 +152,19 @@ exports.index = async(req,res)=>{
       }
       const isvalid = await check.ischeckpassword(req.body.password)
       console.log(isvalid);
-      if(isvalid ){
+      if(isvalid){
          session=req.session;
          session.userid=req.body.name;
          console.log(check.role)
          console.log(req.session)
+         const username = session.userid
+         const user = await users.findOne({name:username}).populate('borrowedItems').exec()
+         
          res.render("home", {
             navLinks,
-            userName:session.userid
+            userName:username,
+            borrowedItems:user.borrowedItems,
+            currentYear
            })
       }
       else{
