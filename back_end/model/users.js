@@ -21,12 +21,17 @@ const userSchema = new mongoose.Schema({
         enum:["user","admin"]
     },
     borrowedItems: [{
-        itemId: {
+        item: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "items"
         },
         quantity: {
-          type: Number
+          type: Number,
+          require: true
+        },
+        itemName:{
+            type: String,
+            require: true
         }
       }]
 })

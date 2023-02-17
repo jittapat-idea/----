@@ -18,7 +18,7 @@
           <p>You are currently borrowing the following items:</p>
           <ul class="list-group mb-3">
             {{#each borrowedItems}}
-              <li class="list-group-item">{{this}}</li>
+              <li class="list-group-item"> คุณได้ยืม: "{{this.itemName}}" เป็นจำนวน [{{this.quantity}}] ชิ้น</li>
             {{/each}}
           </ul>
         {{else}}
