@@ -57,7 +57,7 @@ exports.borrowitem_db = (req, res, next) => {
         return res.status(404).json({ message: 'Item not found' });
       }
       if (!item.quantity) {
-        return res.status(400).json({ message: 'Item quantity not defined' });
+        return res.status(400).json({ message: 'Item quantity not defined item หมด' });
       }
       if (item.quantity < borrowAmount) {
         return res.status(400).json({ message: 'Not enough quantity' });
@@ -97,3 +97,37 @@ exports.borrowitem_db = (req, res, next) => {
       return res.status(500).json({ message: 'Failed to find item' });
     });
 };
+
+exports.returnitem_db = async(req,res) =>{
+  session = req.session;
+  const username = session.userid;
+  const itemId = req.params.id;
+  console.log(username);
+  console.log(itemId);
+  try{
+    const itemz = await items.findOne({_id: itemId})
+    const user = await users.findOne({name: username})
+    const borrowItem = user.borrowedItems.find((item) => item.item.toString() == itemId)
+    console.log(borrowItem);
+    if(!itemz){
+      return res.status(404).json({ message: 'Item not found' });
+    }
+    if(!user){
+      return res.status(404).json({ message: 'User not found' });
+    }
+    if (borrowItem) {
+      itemz.quantity += borrowItem.quantity;
+      user.borrowedItems.splice(user.borrowedItems.indexOf(borrowItem), 1);
+      await itemz.save();
+      await user.save();
+    } else {
+      return res.status(404).json({ message: 'User has not borrowed this item' });
+    }
+    
+    res.redirect('/');
+  }catch (err) {
+    console.error(err);
+    res.status(500).send('Server Error');
+  }
+
+}

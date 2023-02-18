@@ -27,6 +27,7 @@ module.exports =(app)=>{
     app.get('/edit-item/:id',user.isAdmin,aeditem.edititem);
     app.get('/borrow/:id',item.borrowitem);
     
+    app.post('/return-item/:id',item.returnitem_db);
     app.post('/borrow/:itemId',item.borrowitem_db);
     app.post('/delete-item/:id',user.isAdmin,aeditem.deletez);
     app.post('/edit-item/:id',user.isAdmin,aeditem.edititem_db);

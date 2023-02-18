@@ -19,6 +19,9 @@
           <ul class="list-group mb-3">
             {{#each borrowedItems}}
               <li class="list-group-item"> คุณได้ยืม: "{{this.itemName}}" เป็นจำนวน [{{this.quantity}}] ชิ้น</li>
+              <form action="return-item/{{this.item}}" method="post">
+                <button type="submit" class="btn btn-primary"> คืน </button>
+              </form>
             {{/each}}
           </ul>
         {{else}}
