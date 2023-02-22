@@ -13,20 +13,23 @@ adminLinks = [
   { href:'/logout',label:'logout'},
 ];
 
-  var currentYear=(new Date().getFullYear())
+var currentYear=(new Date().getFullYear())
 exports.getAllitems = async(req, res) => {
     session = req.session;
     const username = session.userid
     const user = await users.findOne({name:username})
+    
+    userRole = user.role
     if(session.userid){
         if(user.role == 'admin'){
           items.find().then(data =>{
+            console.log(user.role)
             res.render("items",{
               navLinks:adminLinks,
               showitem:data,
               userName:session.userid,
               currentYear,
-              userRole:user.role
+              userRole
             })
           }).catch(err => {
             res.status(500).send({msg: err.message})
@@ -38,7 +41,7 @@ exports.getAllitems = async(req, res) => {
                   showitem:data,
                   userName:session.userid,
                   currentYear,
-                  userRole:user.role
+                  userRole
               })
           }).catch(err => {
               res.status(500).send({msg: err.message})

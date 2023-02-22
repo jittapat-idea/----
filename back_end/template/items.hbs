@@ -12,6 +12,7 @@
   <div class="container">
     <h1>Items</h1>
     <div class="row">
+    {{#if (eq userRole "admin") }}
       {{#each showitem}}
         <div class="col-sm-4">
           <div class="card" style="width: 18rem;">
@@ -19,22 +20,33 @@
               <img class="card-img-top" src="../public/uploads/{{this.imageURL}}" alt="item image">
               <h5 class="card-title">{{this.itemname}}</h5>
               <p class="card-text">{{this.description}}</p>
+              <p class="card-text">{{this.quantity}}</p>
               <div class="btn-group" role="group" aria-label="Basic example">
-                <a href="borrow/{{this._id}}" class="btn btn-primary">ยืม</a>
-                <a href="edit-item/{{this._id}}" class =" btn btn-warning"> edit </a>
+                <a href="borrow/{{this._id}}" class="btn btn-primary "role="button" aria-pressed="true">ยืม</a>
+                <a href="edit-item/{{this._id}}" class =" btn btn-warning"role="button" aria-pressed="true"> edit </a>
                 <form action="delete-item/{{this._id}}" method="post">
                   <button type="submit" class="btn btn-danger">delete</button>
                 </form>
               </div>
-              {{!-- <a href="borrow/{{this._id}}" class="btn btn-primary">ยืม</a>
-              <a href="edit-item/{{this._id}}" class =" btn btn-warning"> edit </a>
-              <form action="delete-item/{{this._id}}" method="post">
-                <button type="submit" class="btn btn-danger">delete</button>
-              </form> --}}
             </div>
           </div>
         </div>
       {{/each}}
+    {{else}}
+        {{#each showitem}}
+          <div class="col-sm-4">
+            <div class="card" style="width: 18rem;">
+              <div class="card text-center">
+                <img class="card-img-top" src="../public/uploads/{{this.imageURL}}" alt="item image">
+                <h5 class="card-title">{{this.itemname}}</h5>
+                <p class="card-text">{{this.description}}</p>
+                <p class="card-text">{{this.quantity}}</p>
+                <a href="borrow/{{this._id}}" class="btn btn-primary">ยืม</a>
+              </div>
+            </div>
+          </div>
+        {{/each}}
+    {{/if}}
     </div>
   </div>
 
