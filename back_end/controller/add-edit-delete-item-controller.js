@@ -3,6 +3,7 @@ const path = require('path');
 const sharp = require('sharp');
 const items = require('../model/items.js')
 const fs = require('fs')
+const users = require('../model/users.js')
 
 const storage = multer.diskStorage({
   destination:"./public/uploads/",
@@ -28,22 +29,39 @@ const upload = multer({
   }
 }).single("image")
 
-const navLinks = [
-    { href: '/home', label: 'Home' },
-    { href: '/items', label: 'Items' },
-    { href: '/add-item', label: 'Add Item' },
-    { href:'/logout',label:'logout'}
-  ];
+userLinks = [
+  { href: '/home', label: 'Home'  },
+  { href: '/items', label: 'Items'},
+  { href:'/logout',label:'logout'}
+];
+adminLinks = [
+  { href: '/home', label: 'Home'  },
+  { href: '/items', label: 'Items' },
+  { href: '/add-item', label: 'Add Item' },
+  { href:'/logout',label:'logout'},
+];
   var currentYear=(new Date().getFullYear())
 
-exports.Additems = (req, res)=>{
+exports.Additems = async(req, res)=>{
     session = req.session;
+    const username = session.userid
+    const user = await users.findOne({name:username})
     if(session.userid){
+      if(user.role == 'admin'){
         res.render("add_item",{
-            navLinks,
+            navLinks:adminLinks,
             userName:session.userid,
-            currentYear
+            currentYear,
+            userRole:user.role
         })
+      }else{
+          res.render("add_item",{
+            navLinks:userLinks,
+            userName:session.userid,
+            currentYear,
+            userRole:user.role
+          })
+      }
     }else
     res.render("login")
 }
@@ -88,8 +106,10 @@ exports.Additems_db = async (req, res) => {
 };
 
 
-exports.edititem = (req, res)=>{
+exports.edititem =async (req, res)=>{
   session = req.session;
+  const username = session.userid
+  const user = await users.findOne({name:username})
   if(session.userid){
       items.findById(req.params.id).then(data =>{
         if(!data){
@@ -97,13 +117,26 @@ exports.edititem = (req, res)=>{
             msg: "ไม่พบ record รหัส : " + req.params.userID
           })
         }
-        res.render("edit_item",{
-          navLinks,
-          userName:session.userid,
-          currentYear,
-          id: req.params.id,
-          item: data
-        })
+        if(user.role == 'admin'){
+          res.render("edit_item",{
+            navLinks:adminLinks,
+            userName:session.userid,
+            currentYear,
+            id: req.params.id,
+            item: data,
+            userRole:user.role
+          })
+        }else{
+          res.render("edit_item",{
+            navLinks:userLinks,
+            userName:session.userid,
+            currentYear,
+            id: req.params.id,
+            item: data,
+            userRole:user.role
+          })
+        }
+
       }).catch(err => {
         return res.states(500).json({
           msg: "เกิดข้อผิดพลาด เนื่องจาก : " + err.message

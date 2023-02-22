@@ -78,30 +78,42 @@
 const users = require('../model/users.js');
 const { borrowitem } = require('./borrow-controller.js');
 
-const navLinks = [
-   { href: '/home', label: 'Home' },
+userLinks = [
+   { href: '/home', label: 'Home'  },
+   { href: '/items', label: 'Items'},
+   { href:'/logout',label:'logout'}
+ ];
+adminLinks = [
+   { href: '/home', label: 'Home'  },
    { href: '/items', label: 'Items' },
    { href: '/add-item', label: 'Add Item' },
    { href:'/logout',label:'logout'}
  ];
+ 
  var currentYear=(new Date().getFullYear())
 var session
 exports.index = async(req,res)=>{
-   
    session = req.session;
    const username = session.userid
    if(session.userid){
       const user = await users.findOne({name:username}).populate('borrowedItems').exec()
-      res.render("home", {
-          navLinks,
-          userName:username,
-          borrowedItems:user.borrowedItems,
-          currentYear
+      if(user.role == 'admin'){
+         res.render("home", {
+            navLinks:adminLinks,
+            userName:username,
+            borrowedItems:user.borrowedItems,
+            currentYear,
+           })
+      }else{
+         res.render("home", {
+            navLinks:userLinks,
+            userName:username,
+            borrowedItems:user.borrowedItems,
+            currentYear,
          })
+      }
    }else
    res.render("login")
-   
-    
  }
  exports.logout = (req,res)=>{
    req.session.destroy();
@@ -159,13 +171,23 @@ exports.index = async(req,res)=>{
          console.log(req.session)
          const username = session.userid
          const user = await users.findOne({name:username}).populate('borrowedItems').exec()
-         
-         res.render("home", {
-            navLinks,
-            userName:username,
-            borrowedItems:user.borrowedItems,
-            currentYear
-           })
+         if(check.role == 'admin'){
+            res.render("home", {
+               navLinks:adminLinks,
+               userName:username,
+               borrowedItems:user.borrowedItems,
+               currentYear,
+               userRole:check.role
+              })
+         }else{
+            res.render("home", {
+               navLinks:userLinks,
+               userName:username,
+               borrowedItems:user.borrowedItems,
+               currentYear,
+               userRole:check.role
+            })
+         }
       }
       else{
          res.render("error", {message: 'your password is worng'})

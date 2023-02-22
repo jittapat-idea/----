@@ -1,43 +1,79 @@
 const items = require('../model/items.js')
 const users = require('../model/users.js')
 
-const navLinks = [
-    { href: '/home', label: 'Home' },
-    { href: '/items', label: 'Items' },
-    { href: '/add-item', label: 'Add Item' },
-    { href:'/logout',label:'logout'}
-  ];
+userLinks = [
+  { href: '/home', label: 'Home'  },
+  { href: '/items', label: 'Items'},
+  { href:'/logout',label:'logout'}
+];
+adminLinks = [
+  { href: '/home', label: 'Home'  },
+  { href: '/items', label: 'Items' },
+  { href: '/add-item', label: 'Add Item' },
+  { href:'/logout',label:'logout'},
+];
+
   var currentYear=(new Date().getFullYear())
 exports.getAllitems = async(req, res) => {
     session = req.session;
+    const username = session.userid
+    const user = await users.findOne({name:username})
     if(session.userid){
-        items.find().then(data => {
+        if(user.role == 'admin'){
+          items.find().then(data =>{
             res.render("items",{
-                navLinks,
-                showitem:data,
-                userName:session.userid,
-                currentYear
+              navLinks:adminLinks,
+              showitem:data,
+              userName:session.userid,
+              currentYear,
+              userRole:user.role
             })
-        }).catch(err => {
+          }).catch(err => {
             res.status(500).send({msg: err.message})
         })
+        }else{
+          items.find().then(data => {
+              res.render("items",{
+                  navLinks:userLinks,
+                  showitem:data,
+                  userName:session.userid,
+                  currentYear,
+                  userRole:user.role
+              })
+          }).catch(err => {
+              res.status(500).send({msg: err.message})
+          })
+        }
     }else
     res.render("login")
 }
 
-exports.borrowitem = (req, res) =>{
+exports.borrowitem = async(req, res) =>{
     session = req.session;
+    const username = session.userid
+    const user = await users.findOne({name:username})
     const id = req.params.id;
     if(session.userid){
         items.findById( id,(err,item) =>{
             if(err) return res.status(500).send('error finding item');
             if(!item) return res.status(500).send('item not found');
-            res.render('borrow_item',{
+            if(user.role == 'admin'){
+              res.render('borrow_item',{
                 item,
-                navLinks,
+                navLinks:adminLinks,
                 currentYear,
-                userName:session.userid
-            })
+                userName:session.userid,
+                userRole:user.role
+              })
+            }else{
+              res.render('borrow_item',{
+                  item,
+                  navLinks:userLinks,
+                  currentYear,
+                  userName:session.userid,
+                  userRole:user.role
+              })
+            }
         })
     }else
     res.render("login")

@@ -38,7 +38,11 @@ const app = express();
 const path=require("path");
 const multer = require("multer");
 // const { connected } = require('process');
+
 const hbs=require("hbs")
+const handlebarsHelpers = require('handlebars-helpers');
+hbs.registerHelper(handlebarsHelpers());
+
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const User = require('./model/users.js')
