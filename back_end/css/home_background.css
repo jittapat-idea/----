@@ -1,0 +1,53 @@
+.bg { 
+    height: 81%;
+    width: 100%;
+    left:0;
+    right: 0;
+    top: 70px;
+    bottom: 0;
+    position: absolute;
+  background: linear-gradient(124deg,  #98f7c0, #8c86ea, #ec89f5, #fe979c);
+  background-size: 1800% 1800%;
+  
+  -webkit-animation: rainbow 18s ease infinite;
+  -z-animation: rainbow 18s ease infinite;
+  -o-animation: rainbow 18s ease infinite;
+    animation: rainbow 18s ease infinite;}
+  
+  @-webkit-keyframes rainbow {
+      0%{background-position:0% 82%}
+      50%{background-position:100% 19%}
+      100%{background-position:0% 82%}
+  }
+  @-moz-keyframes rainbow {
+      0%{background-position:0% 82%}
+      50%{background-position:100% 19%}
+      100%{background-position:0% 82%}
+  }
+  @-o-keyframes rainbow {
+      0%{background-position:0% 82%}
+      50%{background-position:100% 19%}
+      100%{background-position:0% 82%}
+  }
+  @keyframes rainbow { 
+      0%{background-position:0% 82%}
+      50%{background-position:100% 19%}
+      100%{background-position:0% 82%}
+  }
+
+.sp-card{
+    height: 94%;
+    width: 80%;
+    left:10%;
+    right: 10%;
+    top: 10px;
+    bottom: 0;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    color: #000000;
+    background: rgba(255,255,255,0.7);
+    box-shadow: 0 4px 30px rgba(0,0,0,0.5);
+    overflow-y: auto;
+    
+}
