@@ -1,5 +1,5 @@
 .bg { 
-    height: 81%;
+    height: 83%;
     width: 100%;
     left:0;
     right: 0;
@@ -40,7 +40,7 @@
     width: 80%;
     left:10%;
     right: 10%;
-    top: 10px;
+    top: 20px;
     bottom: 0;
     position: absolute;
     align-items: center;
@@ -48,6 +48,5 @@
     color: #000000;
     background: rgba(255,255,255,0.7);
     box-shadow: 0 4px 30px rgba(0,0,0,0.5);
-    overflow-y: auto;
-    
+    overflow-y: auto  
 }

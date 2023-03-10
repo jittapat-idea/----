@@ -101,7 +101,7 @@ exports.borrowitem_db = (req, res, next) => {
       if (item.quantity < borrowAmount) {
         return res.status(400).json({ message: 'Not enough quantity' });
       }
-
+      
       // Update the item quantity
       item.quantity -= borrowAmount;
       item

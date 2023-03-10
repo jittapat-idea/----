@@ -1,0 +1,45 @@
+.bg {
+    animation:slide 3s ease-in-out infinite alternate;
+    background-image: linear-gradient(60deg, rgb(115, 0, 138) 50%, rgb(247, 79, 79) 50%);
+    bottom:0;
+    left:-50%;
+    opacity:.5;
+    position:fixed;
+    right:-50%;
+    top:0;
+    z-index:-1;
+  }
+  
+  .bg2 {
+    animation-direction:alternate-reverse;
+    animation-duration:4s;
+  }
+  
+  .bg3 {
+    animation-duration:5s;
+  }
+  
+  .sp-card{
+    height: 79%;
+    width: 80%;
+    left:10%;
+    right: 10%;
+    top: 85px;
+    bottom: 0;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    color: #000000;
+    background: rgba(255,255,255,0.7);
+    box-shadow: 0 4px 30px rgba(0,0,0,0.5);
+    overflow-y: auto  
+}
+  
+  @keyframes slide {
+    0% {
+      transform:translateX(-25%);
+    }
+    100% {
+      transform:translateX(25%);
+    }
+  }
