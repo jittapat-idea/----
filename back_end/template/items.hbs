@@ -5,12 +5,14 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="../css/item_background.css">
   <title>items</title>
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100 bg">
   {{> navbar links = navLinks}}
-  <div class="container">
+  <div class="container mt-5">
     <h1>Items</h1>
+    <div style="padding: 10px;"></div>
     <div class="row">
     {{#if (eq userRole "admin") }}
       {{#each showitem}}
@@ -30,7 +32,7 @@
               </div>
             </div>
           </div>
-          <div style="padding: 15px;"></div>
+          <div style="padding: 20px;"></div>
         </div>
       {{/each}}
     {{else}}
@@ -45,7 +47,7 @@
                 <a href="borrow/{{this._id}}" class="btn btn-primary">ยืม</a>
               </div>
             </div>
-            <div style="padding: 15px;"></div>
+            <div style="padding: 20px;"></div>
           </div>
         {{/each}}
     {{/if}}

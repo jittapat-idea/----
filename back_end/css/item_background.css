@@ -1,0 +1,7 @@
+.bg {
+    background: linear-gradient(60deg, rgb(228, 104, 252) 50%, rgb(247, 79, 79) 50%);
+    overflow: auto;
+}
+h1 {
+    font-family:monospace;
+  }
