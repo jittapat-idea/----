@@ -72,7 +72,7 @@ exports.Additems_db = async (req, res) => {
       return res.render("error", { message: err });
     }
     if(!req.file){
-      return res.render("error",{ message: "not file upload" })
+      return res.render("error",{ message: "not file upload or incomplete information" })
     }
     const { itemname, description, quantity } = req.body;
     try {
@@ -113,9 +113,7 @@ exports.edititem =async (req, res)=>{
   if(session.userid){
       items.findById(req.params.id).then(data =>{
         if(!data){
-          return res.status(404).json({
-            msg: "ไม่พบ record รหัส : " + req.params.userID
-          })
+          return res.render("error", {message: "No record found with ID: " + req.params.userID});
         }
         if(user.role == 'admin'){
           res.render("edit_item",{
@@ -138,9 +136,7 @@ exports.edititem =async (req, res)=>{
         }
 
       }).catch(err => {
-        return res.states(500).json({
-          msg: "เกิดข้อผิดพลาด เนื่องจาก : " + err.message
-        })
+        return res.render("error", {message: "An error occurred: " + err.message});
       })
   }else
   res.render("login")
@@ -159,15 +155,7 @@ exports.edititem_db = async (req, res) => {
       item.itemname = itemname;
       item.description = description;
       item.quantity = quantity;
-      // if(req.file && req.file.image){
-      //   fs.unlinkSync(`./public/uploads/${item.imageURL}`);
-
-      //   const image = req.file.image;
-      //   const imageURL = `${item._id}${path.extname(image.name)}`;
-
-      //   image.mv(`./public/uploads/${imageURL}`);
-      //   item.imageURL = imageURL
-      // }
+      
       await item.save();
       res.redirect('/items');
     }
@@ -175,7 +163,7 @@ exports.edititem_db = async (req, res) => {
       res.render("error", {message: 'incomplete information'})
     }
   } catch (error) {
-    res.status(500).send(error.message);
+    res.render("error", {message: err.message});
   }
 };
 exports.deletez = (req, res) => {
@@ -183,9 +171,7 @@ exports.deletez = (req, res) => {
   items.findById(req.params.id)
     .then(data => {
       if (!data) {
-        return res.status(404).json({
-          msg: "No record found with ID: " + req.params.id
-        });
+        return res.render("error", {message: "No record found with ID: " + req.params.id});
       }
       console.log(`data.imageURL:${data.imageURL}`)
       
@@ -206,27 +192,8 @@ exports.deletez = (req, res) => {
       });
     })
     .catch(err => {
-      return res.status(500).json({
-        msg: "An error occurred: " + err.message
-      });
+      return res.render("error", {message: "An error occurred: " + err.message});
     });
 };
-
-// exports.edititem_db = (req, res) =>{
-//   items.findByIdAndUpdate(req.params.id,{$set: req.body},{new: true})
-//     .then(data => {
-//       if (!data) {
-//         return res.status(404).json({
-//           msg: "ไม่พบ Record รห้ส: " + req.params.id
-//         })
-//       }
-//       // Redirect to the Show Item Page
-//       res.redirect("/items");
-//     }).catch(err => {
-//       return res.status(500).json({
-//         msg: "ไม่สามารถ update ข้อมูลได้ เนื่องจาก: " + err.message
-//       })
-//     })
-// }
 
 

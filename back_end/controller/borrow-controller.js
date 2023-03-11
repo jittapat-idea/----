@@ -32,7 +32,8 @@ exports.getAllitems = async(req, res) => {
               userRole
             })
           }).catch(err => {
-            res.status(500).send({msg: err.message})
+            res.render("error", {message: err.message});
+            
         })
         }else{
           items.find().then(data => {
@@ -44,7 +45,7 @@ exports.getAllitems = async(req, res) => {
                   userRole
               })
           }).catch(err => {
-              res.status(500).send({msg: err.message})
+              res.render("error", {message: err.message});
           })
         }
     }else
@@ -58,8 +59,8 @@ exports.borrowitem = async(req, res) =>{
     const id = req.params.id;
     if(session.userid){
         items.findById( id,(err,item) =>{
-            if(err) return res.status(500).send('error finding item');
-            if(!item) return res.status(500).send('item not found');
+            if(err) return res.render("error", {message: 'error finding item'});
+            if(!item) return res.render("error", {message: 'item not found'});
             if(user.role == 'admin'){
               res.render('borrow_item',{
                 item,
@@ -93,13 +94,16 @@ exports.borrowitem_db = (req, res, next) => {
   items.findById(itemId)
     .then(item => {
       if (!item) {
-        return res.status(404).json({ message: 'Item not found' });
+        return res.render("error", {message: 'error finding item'});
       }
       if (!item.quantity) {
-        return res.status(400).json({ message: 'Item quantity not defined item หมด' });
+        return res.render("error", {message: 'Item quantity not defined'});
       }
       if (item.quantity < borrowAmount) {
-        return res.status(400).json({ message: 'Not enough quantity' });
+        return res.render("error", {message: 'Not enough Item '});
+      }
+      if(!borrowAmount || borrowAmount == 0){
+        return res.render("error", {message: 'Amount invalid'});
       }
       
       // Update the item quantity
@@ -121,19 +125,19 @@ exports.borrowitem_db = (req, res, next) => {
                   res.redirect('/items');
                 })
                 .catch(error => {
-                  return res.status(500).json({ message: 'Failed to save user data' });
+                  return res.render("error", {message: 'Failed to save user data'});
                 });
             })
             .catch(error => {
-              return res.status(500).json({ message: 'Failed to find user' });
+              return res.render("error", {message: 'Failed to find user '});
             });
         })
         .catch(error => {
-          return res.status(500).json({ message: 'Failed to save item data' });
+          return res.render("error", {message: 'Failed to save item data'});
         });
     })
     .catch(error => {
-      return res.status(500).json({ message: 'Failed to find item' });
+      return res.render("error", {message: 'Failed to find item'});
     });
 };
 
@@ -149,10 +153,10 @@ exports.returnitem_db = async(req,res) =>{
     const borrowItem = user.borrowedItems.find((item) => item.item.toString() == itemId)
     console.log(borrowItem);
     if(!itemz){
-      return res.status(404).json({ message: 'Item not found' });
+      return res.render("error", {message: 'Item not found'});
     }
     if(!user){
-      return res.status(404).json({ message: 'User not found' });
+      return res.render("error", {message: 'User not found'});
     }
     if (borrowItem) {
       itemz.quantity += borrowItem.quantity;
@@ -160,13 +164,13 @@ exports.returnitem_db = async(req,res) =>{
       await itemz.save();
       await user.save();
     } else {
-      return res.status(404).json({ message: 'User has not borrowed this item' });
+      return res.render("error", {message: 'User has not borrowed this item'});
     }
     
     res.redirect('/');
   }catch (err) {
     console.error(err);
-    res.status(500).send('Server Error');
+    return res.render("error", {message: 'Server Error'});
   }
 
 }
